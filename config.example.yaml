@@ -1,0 +1,27 @@
+# Copy to config.yaml and edit.
+lookback_hours: 24
+max_runs_per_workspace: 200          # how many completed runs to scan per workspace
+failure_states: [FAILED, TIMEDOUT, INTERNAL_ERROR]
+latest_failure_per_job_only: true    # analyse newest failure per job, report how many times it failed
+include_cluster_events: true
+output_dir: reports
+
+workspaces:
+  # Option A: profiles from ~/.databrickscfg (easiest locally)
+  - name: dev
+    profile: dev
+  - name: prod
+    profile: prod
+    job_name_contains: [etl_, ingest]   # optional filter
+
+  # Option B: host + Azure auth (az login, or a service principal via ARM_* env vars)
+  # - name: analytics
+  #   host: https://adb-1234567890123456.7.azuredatabricks.net
+  #   auth_type: azure-cli              # or azure-client-secret
+
+llm:
+  provider: azure_openai     # azure_openai | databricks | none
+  deployment: gpt-4o         # your Azure OpenAI deployment name (or Databricks serving endpoint name)
+  api_version: "2024-10-21"
+  temperature: 0.1
+  max_output_tokens: 1200
